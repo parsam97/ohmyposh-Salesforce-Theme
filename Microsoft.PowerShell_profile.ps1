@@ -1,4 +1,6 @@
 using namespace System.IO
+
+# root-path → @{ Alias='foo'; Stamp='2025-06-29T10:55:12Z' }
 $script:SfCache = @{}
 
 function Get-SfAlias {
@@ -6,16 +8,28 @@ function Get-SfAlias {
 
     $dir = [DirectoryInfo]$startDir
     while ($dir) {
-        # hit the cache?
-        if ($script:SfCache.ContainsKey($dir.FullName)) {
-            return $script:SfCache[$dir.FullName]
-        }
-
         $cfg = Join-Path $dir.FullName '.sf\config.json'
+
         if ([File]::Exists($cfg)) {
+            $stamp = (Get-Item $cfg).LastWriteTimeUtc
+
+            # cache hit and still fresh?
+            if ($script:SfCache.ContainsKey($dir.FullName)) {
+                $entry = $script:SfCache[$dir.FullName]
+                if ($entry.Stamp -eq $stamp) {
+                    return $entry.Alias
+                }
+            }
+
+            # (re)read file and refresh cache
             $text  = [File]::ReadAllText($cfg)
-            $alias = ([regex]::Match($text, '"target-org"\s*:\s*"([^"]+)"')).Groups[1].Value
-            $script:SfCache[$dir.FullName] = $alias
+            $alias = ([regex]::Match($text,
+                     '"target-org"\s*:\s*"([^"]+)"')).Groups[1].Value
+
+            $script:SfCache[$dir.FullName] = @{
+                Alias = $alias
+                Stamp = $stamp
+            }
             return $alias
         }
 
