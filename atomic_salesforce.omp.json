@@ -65,10 +65,14 @@
             "style": "roundrock",
             "threshold": 0
           },
+          "cache": {
+            "strategy": "folder",
+            "duration": "99h"
+          },
           "trailing_diamond": "\ue0b4",
           "background": "#00A1E0",
           "foreground": "#FFFFFF",
-          "template": " \udb82\udc8e {{ .Env.SF_TARGET_ORG_ALIAS }} "
+          "template": "{{ if .Env.SF_TARGET_ORG_ALIAS }} \udb82\udc8e {{ .Env.SF_TARGET_ORG_ALIAS }} {{ end }}"
         }
       ]
     },
