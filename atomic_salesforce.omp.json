@@ -65,10 +65,6 @@
             "style": "roundrock",
             "threshold": 0
           },
-          "cache": {
-            "strategy": "folder",
-            "duration": "99h"
-          },
           "trailing_diamond": "\ue0b4",
           "background": "#00A1E0",
           "foreground": "#FFFFFF",
