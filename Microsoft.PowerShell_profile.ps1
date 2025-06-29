@@ -24,8 +24,9 @@ function Get-SfAlias {
     return ''
 }
 
-function Set-PoshContext {
+function Set-SfAlias {
     $env:SF_TARGET_ORG_ALIAS = Get-SfAlias $PWD.ProviderPath
 }
 
+New-Alias Set-PoshContext Set-SfAlias -Scope Global -Force
 oh-my-posh init pwsh --config "~/VeraCloud/src/ohmyposh_config/atomic_salesforce.omp.json" | Invoke-Expression
