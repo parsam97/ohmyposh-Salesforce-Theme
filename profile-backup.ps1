@@ -42,5 +42,24 @@ function Set-SfAlias {
     $env:SF_TARGET_ORG_ALIAS = Get-SfAlias $PWD.ProviderPath
 }
 
+function Show-GitBranchesColumn {
+       param(
+        [Alias('c')]
+        [int]$Count = 8,
+        [Alias('m')]
+        [int]$MaxLength = 30
+       )
+       git branch | select -first $Count | % { $_.substring(0, [System.Math]::Min($MaxLength, $_.Length)) } | git column
+}
+
 New-Alias Set-PoshContext Set-SfAlias -Scope Global -Force
 oh-my-posh init pwsh --config "~/VeraCloud/src/ohmyposh_config/atomic_salesforce.omp.json" | Invoke-Expression
+
+# I'm tired of this shit
+New-Alias clera clear
+New-Alias cleara clear
+New-Alias cleaar clear
+New-Alias c clear
+New-Alias claer clear
+New-Alias ckear clear
+New-Alias ckaer clear
